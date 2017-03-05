@@ -1,0 +1,28 @@
+{
+    "name": "aldas/php-validators-example",
+    "description": "example of different php validator libraries",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "Respect/Validation": "^1.1",
+        "zendframework/zend-validator": "^2.8",
+        "symfony/validator": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "ValidatorsExample\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html report/html"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0"
+    }
+}
