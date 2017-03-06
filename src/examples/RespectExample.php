@@ -36,7 +36,7 @@ class RespectExample extends BaseExample
                 v::stringType()
                     ->alnum('-_')
                     ->length(4, 255)
-                    ->callback(function ($input) use ($userService) {
+                    ->callback(function ($input) use ($userService) { // business rule 1
                         return $userService->isUserExists($input);
                     }),
                 false
@@ -45,12 +45,12 @@ class RespectExample extends BaseExample
             ->key('booleanField', v::boolVal(), false)
             ->key('optionField', v::in(['person', 'deal']), false)
             ->key('optionRequiredField', v::in(['csv', 'xls']))
-            ->when(
+            ->when( // business rule 2
                 v::key('optionRequiredField', v::equals('csv')), // if
                 v::key('optionField', v::equals('person')), // then
                 v::alwaysValid() // else
             )
-            ->when(
+            ->when( // business rule 3
                 v::allOf(v::key('optionRequiredField', v::equals('csv')), v::key('optionField', v::equals('person'))), // if
                 v::key('digitField', v::notOptional()), // then
                 v::alwaysValid() // else
