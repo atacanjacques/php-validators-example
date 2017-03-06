@@ -1,6 +1,6 @@
 <?php
 
-namespace examples;
+namespace ValidatorsExample\examples;
 
 class SymfonyExample
 {

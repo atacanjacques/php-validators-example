@@ -2,34 +2,36 @@
 
 namespace ValidatorsExample\examples;
 
-use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as v;
 
-class RespectExample
+class RespectExample extends BaseExample
 {
-    private $userService;
-
-    public function __construct()
-    {
-        $this->userService = new UserService();
-    }
-
-    public function exampleValidation(array $input = [])
+    public function exampleAssertion(array $input = [])
     {
         $validator = $this->createValidator();
 
-        if (!$validator->validate($input)) {
+//        // supports ->validate() or ->assert()
+//        if (!$validator->validate($input)) {
+//            // in real project log error, create error payload for end user
+//            throw new \RuntimeException();
+//        }
+
+        try {
+            $validator->assert($input);
+        } catch (NestedValidationException $validationException) {
             // in real project log error, create error payload for end user
-            return false;
+            print_r($validationException->getMessages());
+            throw $validationException;
         }
-        return true;
+        return true; // to make phpunit happy
     }
 
     private function createValidator()
     {
         $userService = $this->userService;
 
-        return v::key('digitField', v::positive(), false)
+        return v::key('digitField', v::digit()->positive(), false)
             ->key('usernameField',
                 v::stringType()
                     ->alnum('-_')
@@ -44,27 +46,15 @@ class RespectExample
             ->key('optionField', v::in(['person', 'deal']), false)
             ->key('optionRequiredField', v::in(['csv', 'xls']))
             ->when(
-                v::key('optionRequiredField', v::equals('csv')),
-                v::key('optionField', v::equals('person'))
+                v::key('optionRequiredField', v::equals('csv')), // if
+                v::key('optionField', v::equals('person')), // then
+                v::alwaysValid() // else
             )
             ->when(
-                v::allOf(v::key('optionRequiredField', v::equals('csv')), v::key('optionField', v::equals('person'))),
-                v::key('digitField', v::notOptional())
-            );
+                v::allOf(v::key('optionRequiredField', v::equals('csv')), v::key('optionField', v::equals('person'))), // if
+                v::key('digitField', v::notOptional()), // then
+                v::alwaysValid() // else
+            )
+            ->key('arrayOfDigits', v::arrayType()->each(v::digit()->positive()), false);
     }
-
-    public function exampleAssertion(array $input = [])
-    {
-        $validator = $this->createValidator();
-
-        try {
-            $validator->assert($input);
-        } catch (ValidationException $validationException) {
-            // in real project log error, create error payload for end user
-            print_r($validationException->getMessages());
-            throw $validationException;
-        }
-        return true; // to make phpunit happy
-    }
-
 }

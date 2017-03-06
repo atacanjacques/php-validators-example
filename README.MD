@@ -1,4 +1,8 @@
-# Test project to compare different php validator libraries
+# Example project to compare different php validator libraries
+
+* [Respect/Validation](https://github.com/Respect/Validation) - [RespectExample.php](src/examples/RespectExample.php)
+* [zendframework/zend-validator](https://zendframework.github.io/zend-validator/) - [ZendExample.php](src/examples/ZendExample.php)
+* [symfony/validator](http://symfony.com/doc/current/validation.html) - [SymfonyExample.php](src/examples/SymfonyExample.php)
 
 ## Technical rules to validate
 
@@ -16,6 +20,10 @@
     * optional
     * must match one of the following ['person', 'deal']
 * optionRequiredField - required, must match one of the following ['csv', 'xls']
+* arrayOfDigits -
+    * optional
+    * must be an array
+    * every value in array must be digit with positive value
 
 ## Business rules to validate
 
@@ -37,6 +45,7 @@ Example of valid input:
   "alphaNumField": "abc123",
   "optionField": "person",
   "optionRequiredField": "csv",
-  "digitRelatedField": 34534
+  "digitRelatedField": 34534,
+  "arrayOfDigits": [123, 124]
 }
 ```

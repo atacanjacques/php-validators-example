@@ -23,6 +23,7 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html report/html"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0"
+        "phpunit/phpunit": "^6.0",
+        "zendframework/zend-filter": "^2.7"
     }
 }
