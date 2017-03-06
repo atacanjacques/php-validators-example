@@ -1,8 +1,11 @@
 # Example project to compare different php validator libraries
 
 * [Respect/Validation](https://github.com/Respect/Validation) - [RespectExample.php](src/examples/RespectExample.php)
+    * supported validators: https://github.com/Respect/Validation/blob/master/docs/VALIDATORS.md
 * [zendframework/zend-validator](https://zendframework.github.io/zend-validator/) - [ZendExample.php](src/examples/ZendExample.php)
+    * supported validators: https://zendframework.github.io/zend-validator/set/
 * [symfony/validator](http://symfony.com/doc/current/validation.html) - [SymfonyExample.php](src/examples/SymfonyExample.php)
+    * supported validators: http://symfony.com/doc/current/validation.html#constraints
 
 ## Technical rules to validate
 

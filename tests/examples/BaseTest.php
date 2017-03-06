@@ -28,8 +28,13 @@ abstract class BaseTest extends TestCase
         $this->assertTrue($this->runValidation(static::INPUT_OK));
     }
 
-    public function testShouldFailForDigitField()
+    public function testDigitField()
     {
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['digitField' => 1, 'optionRequiredField' => 'xls'])));
+        $inputUnset = array_merge(static::INPUT_OK, ['digitField' => null, 'optionRequiredField' => 'xls']);
+        unset($inputUnset['digitField']);
+        $this->assertTrue($this->runValidation($inputUnset)); // validate optional
+
         $this->assertFalse($this->runValidation(array_merge(static::INPUT_OK, ['digitField' => 'a']))); // not a number
         $this->assertFalse($this->runValidation(array_merge(static::INPUT_OK, ['digitField' => -1]))); // not positive
     }
@@ -81,6 +86,7 @@ abstract class BaseTest extends TestCase
     public function testShouldNotPassBusiness3Rule()
     {
         $optionFieldNotCorrect = array_merge(static::INPUT_OK, ['digitField' => null]);
+        unset($optionFieldNotCorrect['digitField']);
 
         $this->assertFalse($this->runValidation($optionFieldNotCorrect));
     }

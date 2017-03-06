@@ -24,7 +24,7 @@ class ZendExample extends BaseExample
         $digitFieldValidator = new ValidatorChain();
         $digitFieldValidator->attach(new Digits()); // needs extra library (zendframework/zend-filter) included to work
         $digitFieldValidator->attach(new GreaterThan(['min' => 0, 'inclusive' => true]));
-        if (!$digitFieldValidator->isValid($input['digitField'])) {
+        if (isset($input['digitField']) && !$digitFieldValidator->isValid($input['digitField'])) {
             $errors[] = $digitFieldValidator->getMessages();
         }
 
@@ -63,6 +63,11 @@ class ZendExample extends BaseExample
         $optionFieldValidator->attach(new Callback(['callback' => function ($value) use ($input) {
             // business rule 2 is bit hackish
             return $input['optionRequiredField'] !== 'csv' || ($input['optionRequiredField'] === 'csv' && $value === 'person');
+        }]));
+        $optionFieldValidator->attach(new Callback(['callback' => function ($value) use ($input) {
+            // business rule 3 is bit hackish
+            $prerequisites = $input['optionRequiredField'] === 'csv' && $value === 'person';
+            return !$prerequisites || !empty($input['digitField']);
         }]));
         if (!$optionFieldValidator->isValid($input['optionField'])) {
             $errors[] = $optionFieldValidator->getMessages();
