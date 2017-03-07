@@ -109,8 +109,9 @@ class SymfonyExample extends BaseExample
 
         $errors = $validator->validate($input, $collectionConstraint);
         if (count($errors) > 0) {
+            // in real project log error, create error payload for end user
             print_r($errors);
-            return false;
+            throw new \RuntimeException('fail');
         }
         return true;
     }

@@ -96,7 +96,7 @@ class ZendExample extends BaseExample
 
         if (!empty($errors)) {
             // validation failed. in real project log error, create error payload for end user
-            return false;
+            throw new \RuntimeException('fail');
         }
         return true; // so phpunit can assert
     }

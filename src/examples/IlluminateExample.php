@@ -33,8 +33,9 @@ class IlluminateExample extends BaseExample
         });
 
         if ($validator->fails()) {
+            // in real project log error, create error payload for end user
             print_r($validator->errors());
-            return false;
+            throw new \RuntimeException('fail');
         }
         return true;
     }

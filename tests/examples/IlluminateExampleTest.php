@@ -8,6 +8,12 @@ class IlluminateExampleTest extends BaseTest
 {
     public function runValidation(array $input = [])
     {
-        return (new IlluminateExample())->exampleAssertion($input);
+        try {
+            return (new IlluminateExample())->exampleAssertion($input);
+        } catch (\RuntimeException $exception) {
+            return false;
+        }
     }
+
+    // TODO add some tests to check validator error messages
 }

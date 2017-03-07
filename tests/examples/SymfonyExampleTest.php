@@ -9,6 +9,12 @@ class SymfonyExampleTest extends BaseTest
 {
     public function runValidation(array $input = [])
     {
-        return (new SymfonyExample())->exampleAssertion($input);
+        try {
+            return (new SymfonyExample())->exampleAssertion($input);
+        } catch (\RuntimeException $exception) {
+            return false;
+        }
     }
+
+    // TODO add some tests to check validator error messages
 }

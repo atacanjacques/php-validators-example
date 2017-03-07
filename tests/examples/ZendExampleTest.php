@@ -9,6 +9,12 @@ class ZendExampleTest extends BaseTest
 
     public function runValidation(array $input = [])
     {
-        return (new ZendExample())->exampleAssertion($input);
+        try {
+            return (new ZendExample())->exampleAssertion($input);
+        } catch (\RuntimeException $exception) {
+            return false;
+        }
     }
+
+    // TODO add some tests to check validator error messages
 }

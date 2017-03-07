@@ -9,29 +9,9 @@ class RespectExample extends BaseExample
 {
     public function exampleAssertion(array $input = [])
     {
-        $validator = $this->createValidator();
-
-//        // supports ->validate() or ->assert()
-//        if (!$validator->validate($input)) {
-//            // in real project log error, create error payload for end user
-//            throw new \RuntimeException();
-//        }
-
-        try {
-            $validator->assert($input);
-        } catch (NestedValidationException $validationException) {
-            // in real project log error, create error payload for end user
-            print_r($validationException->getMessages());
-            throw $validationException;
-        }
-        return true; // to make phpunit happy
-    }
-
-    private function createValidator()
-    {
         $userService = $this->userService;
 
-        return v::key('digitField', v::digit()->positive(), false)
+        $validator = v::key('digitField', v::digit()->positive(), false)
             ->key('usernameField',
                 v::stringType()
                     ->alnum('-_')
@@ -56,5 +36,20 @@ class RespectExample extends BaseExample
                 v::alwaysValid() // else
             )
             ->key('arrayOfDigits', v::arrayType()->each(v::digit()->positive()), false);
+
+//        // supports ->validate() or ->assert()
+//        if (!$validator->validate($input)) {
+//            // in real project log error, create error payload for end user
+//            throw new \RuntimeException();
+//        }
+
+        try {
+            $validator->assert($input);
+        } catch (NestedValidationException $validationException) {
+            // in real project log error, create error payload for end user
+            print_r($validationException->getMessages());
+            throw $validationException;
+        }
+        return true; // to make phpunit happy
     }
 }
