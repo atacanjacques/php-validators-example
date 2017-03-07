@@ -6,7 +6,9 @@
     "require": {
         "Respect/Validation": "^1.1",
         "zendframework/zend-validator": "^2.8",
-        "symfony/validator": "^3.2"
+        "zendframework/zend-filter": "^2.7",
+        "symfony/validator": "^3.2",
+        "illuminate/validation": "^5.4"
     },
     "autoload": {
         "psr-4": {
@@ -23,7 +25,6 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html report/html"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "zendframework/zend-filter": "^2.7"
+        "phpunit/phpunit": "^6.0"
     }
 }
