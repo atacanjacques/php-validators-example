@@ -67,9 +67,9 @@ class IlluminateExample extends BaseExample
                 return false;
             }
 
-            foreach ($parameters as $dateFormats) {
-                $date = DateTime::createFromFormat($dateFormats, $value);
-                if ($date && $date->format($dateFormats) == $value) {
+            foreach ($parameters as $format) {
+                $date = DateTime::createFromFormat($format, $value);
+                if ($date && $date->format($format) == $value) {
                     return true;
                 }
             }

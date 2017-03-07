@@ -45,9 +45,24 @@ abstract class BaseTest extends TestCase
         $this->assertFalse($this->runValidation(array_merge(static::INPUT_OK, ['usernameField' => "aa\x01aaaaaaaaaaaaaaaa"]))); // invalid characters
     }
 
-    public function testShouldFailForDateField()
+    public function testDateField()
     {
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['dateField' => '2017-03-05 11:12:13'])));
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['dateField' => '2017-03-05 11:12'])));
+
         $this->assertFalse($this->runValidation(array_merge(static::INPUT_OK, ['dateField' => '2017-03-05T11:12:13']))); // not 'YYYY-MM-DD HH:MI:SS' format
+    }
+
+    public function testBooleanField()
+    {
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['booleanField' => 'true'])));
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['booleanField' => 'false'])));
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['booleanField' => false])));
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['booleanField' => true])));
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['booleanField' => 0])));
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['booleanField' => 1])));
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['booleanField' => '1'])));
+        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['booleanField' => '0'])));
     }
 
     public function testOptionField()
