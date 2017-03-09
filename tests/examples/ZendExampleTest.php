@@ -2,6 +2,7 @@
 
 namespace tests\examples;
 
+use ValidatorsExample\examples\support\ValidationException;
 use ValidatorsExample\examples\ZendExample;
 
 class ZendExampleTest extends BaseTest
@@ -11,10 +12,21 @@ class ZendExampleTest extends BaseTest
     {
         try {
             return (new ZendExample())->exampleAssertion($input);
-        } catch (\RuntimeException $exception) {
+        } catch (ValidationException $exception) {
             return false;
         }
     }
 
-    // TODO add some tests to check validator error messages
+    public function testShouldFailWhenMissingRequiredFields()
+    {
+        $validator = new ZendExample();
+
+        try {
+            $validator->exampleAssertion([]);
+        } catch (ValidationException $ex) {
+            $messages = $ex->getMessages();
+            $this->assertArrayHasKey('dateField', $messages);
+            $this->assertArrayHasKey('optionRequiredField', $messages);
+        }
+    }
 }

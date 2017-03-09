@@ -4,6 +4,8 @@ namespace ValidatorsExample\examples;
 
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validator as v;
+use ValidatorsExample\examples\support\BaseExample;
+use ValidatorsExample\examples\support\ValidationException;
 
 class RespectExample extends BaseExample
 {
@@ -48,7 +50,7 @@ class RespectExample extends BaseExample
         } catch (NestedValidationException $validationException) {
             // in real project log error, create error payload for end user
             print_r($validationException->getMessages());
-            throw $validationException;
+            throw new ValidationException($validationException->getMessages());
         }
         return true; // to make phpunit happy
     }

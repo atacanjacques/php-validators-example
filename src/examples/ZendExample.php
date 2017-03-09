@@ -2,6 +2,8 @@
 
 namespace ValidatorsExample\examples;
 
+use ValidatorsExample\examples\support\BaseExample;
+use ValidatorsExample\examples\support\ValidationException;
 use Zend\Validator\Callback;
 use Zend\Validator\Date;
 use Zend\Validator\Digits;
@@ -25,7 +27,7 @@ class ZendExample extends BaseExample
         $digitFieldValidator->attach(new Digits()); // needs extra library (zendframework/zend-filter) included to work
         $digitFieldValidator->attach(new GreaterThan(['min' => 0, 'inclusive' => true]));
         if (isset($input['digitField']) && !$digitFieldValidator->isValid($input['digitField'])) {
-            $errors[] = $digitFieldValidator->getMessages();
+            $errors['digitField'] = $digitFieldValidator->getMessages();
         }
 
         // usernameField
@@ -36,8 +38,8 @@ class ZendExample extends BaseExample
             // business rule 1
             return $userService->isUserExists($input);
         }]));
-        if (!$usernameValidator->isValid($input['usernameField'])) {
-            $errors[] = $usernameValidator->getMessages();
+        if (isset($input['usernameField']) && !$usernameValidator->isValid($input['usernameField'])) {
+            $errors['usernameField'] = $usernameValidator->getMessages();
         }
 
         // dateField
@@ -45,15 +47,15 @@ class ZendExample extends BaseExample
         $dateValidator->attach(new NotEmpty(NotEmpty::STRING));
         $dateFormatValidator = new Date(['format' => 'Y-m-d G:i:s']);
         $dateValidator->attach($dateFormatValidator);
-        if (!$dateValidator->isValid($input['dateField'])) {
+        if (!$dateValidator->isValid($input['dateField'] ?? null)) {
             $dateFormatValidator->setFormat('Y-m-d G:i');
-            if (!$dateValidator->isValid($input['dateField'])) {
-                $errors[] = $digitFieldValidator->getMessages();
+            if (!$dateValidator->isValid($input['dateField'] ?? null)) {
+                $errors['dateField'] = $dateValidator->getMessages();
             }
         }
 
         // booleanField - does not have validator for Boolean values. Must create own validator class or use filter_var to validate
-        if (null === filter_var($input['booleanField'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)) {
+        if (isset($input['booleanField']) && null === filter_var($input['booleanField'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)) {
             $errors[] = 'booleanField must be boolean value';
         }
 
@@ -69,26 +71,26 @@ class ZendExample extends BaseExample
             $prerequisites = $input['optionRequiredField'] === 'csv' && $value === 'person';
             return !$prerequisites || !empty($input['digitField']);
         }]));
-        if (!$optionFieldValidator->isValid($input['optionField'])) {
-            $errors[] = $optionFieldValidator->getMessages();
+        if (isset($input['optionField']) && !$optionFieldValidator->isValid($input['optionField'])) {
+            $errors['optionField'] = $optionFieldValidator->getMessages();
         }
 
         // optionRequiredField
         $optionRequiredFieldValidator = new ValidatorChain();
         $optionRequiredFieldValidator->attach(new NotEmpty(NotEmpty::STRING));
         $optionRequiredFieldValidator->attach(new InArray(['haystack' => ['csv', 'xls']]));
-        if (!$optionRequiredFieldValidator->isValid($input['optionRequiredField'])) {
-            $errors[] = $optionRequiredFieldValidator->getMessages();
+        if (!$optionRequiredFieldValidator->isValid($input['optionRequiredField'] ?? null)) {
+            $errors['optionRequiredField'] = $optionRequiredFieldValidator->getMessages();
         }
 
         // arrayOfDigits - does not have validator for Array values specific validator. Must create own validator class or foreach to validate
         $digitValidator = new ValidatorChain();
         $digitValidator->attach(new Digits()); // needs extra library (zendframework/zend-filter) included to work
         $digitValidator->attach(new GreaterThan(['min' => 0, 'inclusive' => true]));
-        if (is_array($input['arrayOfDigits'])) {
+        if (isset($input['arrayOfDigits']) && is_array($input['arrayOfDigits'])) {
             foreach ($input['arrayOfDigits'] as $digit) {
                 if (!$digitValidator->isValid($digit)) {
-                    $errors[] = $digitValidator->getMessages();
+                    $errors['arrayOfDigits'] = $digitValidator->getMessages();
                     break; // first failure is good enough
                 }
             }
@@ -96,7 +98,8 @@ class ZendExample extends BaseExample
 
         if (!empty($errors)) {
             // validation failed. in real project log error, create error payload for end user
-            throw new \RuntimeException('fail');
+            print_r($errors);
+            throw new ValidationException($errors);
         }
         return true; // so phpunit can assert
     }

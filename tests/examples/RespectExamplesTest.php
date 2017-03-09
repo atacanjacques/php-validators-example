@@ -2,8 +2,8 @@
 
 namespace tests\examples;
 
-use Respect\Validation\Exceptions\NestedValidationException;
 use ValidatorsExample\examples\RespectExample;
+use ValidatorsExample\examples\support\ValidationException;
 
 class RespectExamplesTest extends BaseTest
 {
@@ -13,7 +13,7 @@ class RespectExamplesTest extends BaseTest
 
         try {
             return $validator->exampleAssertion($input);
-        } catch (NestedValidationException $exception) {
+        } catch (ValidationException $exception) {
             return false;
         }
     }
@@ -24,9 +24,10 @@ class RespectExamplesTest extends BaseTest
 
         try {
             $validator->exampleAssertion([]);
-        } catch (NestedValidationException $ex) {
-            $this->assertContains('Key dateField must be present', $ex->getMessages());
-            $this->assertContains('Key optionRequiredField must be present', $ex->getMessages());
+        } catch (ValidationException $ex) {
+            $messages = $ex->getMessages(); // needs work to get messages as ['field' => 'message'] structure
+            $this->assertContains('Key dateField must be present', $messages);
+            $this->assertContains('Key optionRequiredField must be present', $messages);
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace ValidatorsExample\examples;
+namespace ValidatorsExample\examples\support;
 
 class UserService
 {

@@ -6,6 +6,8 @@ use DateTime;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Validation\Factory;
 use InvalidArgumentException;
+use ValidatorsExample\examples\support\BaseExample;
+use ValidatorsExample\examples\support\ValidationException;
 
 class IlluminateExample extends BaseExample
 {
@@ -35,7 +37,7 @@ class IlluminateExample extends BaseExample
         if ($validator->fails()) {
             // in real project log error, create error payload for end user
             print_r($validator->errors());
-            throw new \RuntimeException('fail');
+            throw new ValidationException($validator->errors()->getMessages());
         }
         return true;
     }

@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Required;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Validation;
+use ValidatorsExample\examples\support\BaseExample;
+use ValidatorsExample\examples\support\ValidationException;
 
 class SymfonyExample extends BaseExample
 {
@@ -41,7 +43,10 @@ class SymfonyExample extends BaseExample
 
         // business rule 3
         $businessRule3 = function ($object, ExecutionContextInterface $context, $payload) {
-            if (empty($object) && $context->getRoot()['optionRequiredField'] === 'csv' && $context->getRoot()['optionField'] === 'person') {
+            $root = $context->getRoot();
+            if (empty($object) && isset($root['optionRequiredField'], $root['optionField']) &&
+                $root['optionRequiredField'] === 'csv' && $root['optionField'] === 'person'
+            ) {
                 $context->buildViolation('digitField is required if \'optionRequiredField\' = \'csv\' and \'optionField\' = \'person\', otherwise optional')
                     ->atPath('digitField')
                     ->addViolation();
@@ -111,7 +116,7 @@ class SymfonyExample extends BaseExample
         if (count($errors) > 0) {
             // in real project log error, create error payload for end user
             print_r($errors);
-            throw new \RuntimeException('fail');
+            throw new ValidationException($errors);
         }
         return true;
     }

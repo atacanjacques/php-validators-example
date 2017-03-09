@@ -3,6 +3,7 @@
 namespace tests\examples;
 
 use ValidatorsExample\examples\IlluminateExample;
+use ValidatorsExample\examples\support\ValidationException;
 
 class IlluminateExampleTest extends BaseTest
 {
@@ -10,10 +11,21 @@ class IlluminateExampleTest extends BaseTest
     {
         try {
             return (new IlluminateExample())->exampleAssertion($input);
-        } catch (\RuntimeException $exception) {
+        } catch (ValidationException $exception) {
             return false;
         }
     }
 
-    // TODO add some tests to check validator error messages
+    public function testShouldFailWhenMissingRequiredFields()
+    {
+        $validator = new IlluminateExample();
+
+        try {
+            $validator->exampleAssertion([]);
+        } catch (ValidationException $ex) {
+            $messages = $ex->getMessages();
+            $this->assertArrayHasKey('dateField', $messages);
+            $this->assertArrayHasKey('optionRequiredField', $messages);
+        }
+    }
 }

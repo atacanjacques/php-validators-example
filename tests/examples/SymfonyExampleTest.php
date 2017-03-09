@@ -3,6 +3,7 @@
 namespace tests\examples;
 
 
+use ValidatorsExample\examples\support\ValidationException;
 use ValidatorsExample\examples\SymfonyExample;
 
 class SymfonyExampleTest extends BaseTest
@@ -11,10 +12,25 @@ class SymfonyExampleTest extends BaseTest
     {
         try {
             return (new SymfonyExample())->exampleAssertion($input);
-        } catch (\RuntimeException $exception) {
+        } catch (ValidationException $exception) {
             return false;
         }
     }
 
-    // TODO add some tests to check validator error messages
+    public function testShouldFailWhenMissingRequiredFields()
+    {
+        $validator = new SymfonyExample();
+
+        try {
+            $validator->exampleAssertion([]);
+        } catch (ValidationException $ex) {
+            // needs a bit work to get errors in simpler format
+            $errors = [];
+            foreach ($ex->getMessages() as $message) {
+                $errors[str_replace(['[', ']'], '', $message->getPropertyPath())] = $message->getMessage();
+            }
+            $this->assertArrayHasKey('dateField', $errors);
+            $this->assertArrayHasKey('optionRequiredField', $errors);
+        }
+    }
 }
