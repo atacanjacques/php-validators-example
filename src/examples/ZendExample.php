@@ -23,34 +23,34 @@ class ZendExample extends BaseExample
         $errors = [];
 
         // digitField
-        $digitFieldValidator = new ValidatorChain();
-        $digitFieldValidator->attach(new Digits()); // needs extra library (zendframework/zend-filter) included to work
-        $digitFieldValidator->attach(new GreaterThan(['min' => 0, 'inclusive' => true]));
-        if (isset($input['digitField']) && !$digitFieldValidator->isValid($input['digitField'])) {
-            $errors['digitField'] = $digitFieldValidator->getMessages();
+        $digitField = new ValidatorChain();
+        $digitField->attach(new Digits()); // needs extra library (zendframework/zend-filter) included to work
+        $digitField->attach(new GreaterThan(['min' => 0, 'inclusive' => true]));
+        if (isset($input['digitField']) && !$digitField->isValid($input['digitField'])) {
+            $errors['digitField'] = $digitField->getMessages();
         }
 
         // usernameField
-        $usernameValidator = new ValidatorChain();
-        $usernameValidator->attach(new Regex(['pattern' => '/^[a-zA-Z0-9-_]+$/'])); // can be replace with 'new Zend\I18n\Validator\Alnum()' when 'zend-i18n' library is included
-        $usernameValidator->attach(new StringLength(['min' => 4, 'max' => 255]));
-        $usernameValidator->attach(new Callback(['callback' => function ($input) use ($userService) {
+        $username = new ValidatorChain();
+        $username->attach(new Regex(['pattern' => '/^[a-zA-Z0-9-_]+$/'])); // can be replace with 'new Zend\I18n\Validator\Alnum()' when 'zend-i18n' library is included
+        $username->attach(new StringLength(['min' => 4, 'max' => 255]));
+        $username->attach(new Callback(['callback' => function ($input) use ($userService) {
             // business rule 1
             return $userService->isUserExists($input);
         }]));
-        if (isset($input['usernameField']) && !$usernameValidator->isValid($input['usernameField'])) {
-            $errors['usernameField'] = $usernameValidator->getMessages();
+        if (isset($input['usernameField']) && !$username->isValid($input['usernameField'])) {
+            $errors['usernameField'] = $username->getMessages();
         }
 
         // dateField
-        $dateValidator = new ValidatorChain();
-        $dateValidator->attach(new NotEmpty(NotEmpty::STRING));
-        $dateFormatValidator = new Date(['format' => 'Y-m-d G:i:s']);
-        $dateValidator->attach($dateFormatValidator);
-        if (!$dateValidator->isValid($input['dateField'] ?? null)) {
-            $dateFormatValidator->setFormat('Y-m-d G:i');
-            if (!$dateValidator->isValid($input['dateField'] ?? null)) {
-                $errors['dateField'] = $dateValidator->getMessages();
+        $date = new ValidatorChain();
+        $date->attach(new NotEmpty(NotEmpty::STRING));
+        $dateFormat = new Date(['format' => 'Y-m-d G:i:s']);
+        $date->attach($dateFormat);
+        if (!$date->isValid($input['dateField'] ?? null)) {
+            $dateFormat->setFormat('Y-m-d G:i');
+            if (!$date->isValid($input['dateField'] ?? null)) {
+                $errors['dateField'] = $date->getMessages();
             }
         }
 
@@ -60,27 +60,27 @@ class ZendExample extends BaseExample
         }
 
         // optionField
-        $optionFieldValidator = new ValidatorChain();
-        $optionFieldValidator->attach(new InArray(['haystack' => ['person', 'deal']]));
-        $optionFieldValidator->attach(new Callback(['callback' => function ($value) use ($input) {
+        $optionField = new ValidatorChain();
+        $optionField->attach(new InArray(['haystack' => ['person', 'deal']]));
+        $optionField->attach(new Callback(['callback' => function ($value) use ($input) {
             // business rule 2 is bit hackish
             return $input['optionRequiredField'] !== 'csv' || ($input['optionRequiredField'] === 'csv' && $value === 'person');
         }]));
-        $optionFieldValidator->attach(new Callback(['callback' => function ($value) use ($input) {
+        $optionField->attach(new Callback(['callback' => function ($value) use ($input) {
             // business rule 3 is bit hackish
             $prerequisites = $input['optionRequiredField'] === 'csv' && $value === 'person';
             return !$prerequisites || !empty($input['digitField']);
         }]));
-        if (isset($input['optionField']) && !$optionFieldValidator->isValid($input['optionField'])) {
-            $errors['optionField'] = $optionFieldValidator->getMessages();
+        if (isset($input['optionField']) && !$optionField->isValid($input['optionField'])) {
+            $errors['optionField'] = $optionField->getMessages();
         }
 
         // optionRequiredField
-        $optionRequiredFieldValidator = new ValidatorChain();
-        $optionRequiredFieldValidator->attach(new NotEmpty(NotEmpty::STRING));
-        $optionRequiredFieldValidator->attach(new InArray(['haystack' => ['csv', 'xls']]));
-        if (!$optionRequiredFieldValidator->isValid($input['optionRequiredField'] ?? null)) {
-            $errors['optionRequiredField'] = $optionRequiredFieldValidator->getMessages();
+        $optionRequiredField = new ValidatorChain();
+        $optionRequiredField->attach(new NotEmpty(NotEmpty::STRING));
+        $optionRequiredField->attach(new InArray(['haystack' => ['csv', 'xls']]));
+        if (!$optionRequiredField->isValid($input['optionRequiredField'] ?? null)) {
+            $errors['optionRequiredField'] = $optionRequiredField->getMessages();
         }
 
         // arrayOfDigits - does not have validator for Array values specific validator. Must create own validator class or foreach to validate
