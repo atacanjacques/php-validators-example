@@ -9,7 +9,7 @@ use ValidatorsExample\examples\support\ValidationException;
 
 class RespectExample extends BaseExample
 {
-    public function exampleAssertion(array $input = [])
+    public function exampleValidation(array $input = [])
     {
         $userService = $this->userService;
 
@@ -37,7 +37,13 @@ class RespectExample extends BaseExample
                 v::key('digitField', v::notOptional()), // then
                 v::alwaysValid() // else
             )
-            ->key('arrayOfDigits', v::arrayType()->each(v::digit()->positive()), false);
+            ->key('arrayOfDigits', v::arrayType()->each(v::digit()->positive()), false)
+            ->key('arrayOfObjects', v::arrayType()
+                ->each(
+                    v::key('digitField', v::digit()->positive(), false)
+                        ->key('optionRequiredField', v::in(['csv', 'xls']))
+                )
+            );
 
 //        // supports ->validate() or ->assert()
 //        if (!$validator->validate($input)) {

@@ -17,7 +17,7 @@ use Zend\Validator\ValidatorChain;
 class ZendExample extends BaseExample
 {
     // NB: missing isset() checks everywhere
-    public function exampleAssertion(array $input = [])
+    public function exampleValidation(array $input = [])
     {
         $userService = $this->userService;
         $errors = [];
@@ -91,6 +91,28 @@ class ZendExample extends BaseExample
             foreach ($input['arrayOfDigits'] as $digit) {
                 if (!$digitValidator->isValid($digit)) {
                     $errors['arrayOfDigits'] = $digitValidator->getMessages();
+                    break; // first failure is good enough
+                }
+            }
+        }
+
+        // arrayOfObjects - does not have validator for Array values specific validator. Must create own validator class or foreach to validate
+        $digitValidator2 = new ValidatorChain();
+        $digitValidator2->attach(new Digits());
+        $digitValidator2->attach(new GreaterThan(['min' => 0, 'inclusive' => true]));
+
+        $optionRequiredField2 = new ValidatorChain();
+        $optionRequiredField2->attach(new NotEmpty(NotEmpty::STRING));
+        $optionRequiredField2->attach(new InArray(['haystack' => ['csv', 'xls']]));
+        if (isset($input['arrayOfObjects']) && is_array($input['arrayOfObjects'])) {
+            foreach ($input['arrayOfObjects'] as $object) {
+                if (!$optionRequiredField2->isValid($object['optionRequiredField'] ?? null)) {
+                    $errors['optionRequiredField'] = $optionRequiredField2->getMessages();
+                    break; // first failure is good enough
+                }
+
+                if (!$digitValidator2->isValid($object['digitField'] ?? null)) {
+                    $errors['arrayOfDigits'] = $digitValidator2->getMessages();
                     break; // first failure is good enough
                 }
             }

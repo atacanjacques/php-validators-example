@@ -11,7 +11,7 @@ use ValidatorsExample\examples\support\ValidationException;
 
 class IlluminateExample extends BaseExample
 {
-    public function exampleAssertion(array $input = [])
+    public function exampleValidation(array $input = [])
     {
         $validator = $this->getValidator()->make($input, [
             'digitField' => 'integer|min:0',
@@ -21,7 +21,11 @@ class IlluminateExample extends BaseExample
             'optionField' => 'in:person,deal',
             'optionRequiredField' => 'required|in:csv,xls',
             'arrayOfDigits' => 'array',
-            'arrayOfDigits.*' => 'integer|min:0', // array contents validation
+            // array contents validation
+            'arrayOfDigits.*' => 'integer|min:0',
+            // array of objects contents validation
+            'arrayOfObjects.*.optionRequiredField' => 'required|in:csv,xls',
+            'arrayOfObjects.*.digitField' => 'integer|min:0',
         ]);
 
         // business rule 2

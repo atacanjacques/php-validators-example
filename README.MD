@@ -31,6 +31,14 @@ Most popular validation libraries from https://packagist.org
     * optional
     * must be an array
     * every value in array must be digit with positive value
+* arrayOfObjects -
+    * optionRequiredField -
+        * required
+        * must match one of the following ['xls', 'csv']
+    * digitField -
+        * optional
+        * must be an array
+        * every value in array must be digit with positive value
 
 ## Business rules to validate
 
@@ -53,6 +61,10 @@ Example of valid input:
   "optionField": "person",
   "optionRequiredField": "csv",
   "digitRelatedField": 34534,
-  "arrayOfDigits": [123, 124]
+  "arrayOfDigits": [123, 124],
+  "arrayOfObjects": [
+    { "optionField": "deal", "digitField": 12}, 
+    { "optionField": "person", "digitField": 13} 
+  ]
 }
 ```

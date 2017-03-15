@@ -11,7 +11,7 @@ class ZendExampleTest extends BaseTest
     public function runValidation(array $input = [])
     {
         try {
-            return (new ZendExample())->exampleAssertion($input);
+            return (new ZendExample())->exampleValidation($input);
         } catch (ValidationException $exception) {
             return false;
         }
@@ -22,7 +22,7 @@ class ZendExampleTest extends BaseTest
         $validator = new ZendExample();
 
         try {
-            $validator->exampleAssertion([]);
+            $validator->exampleValidation([]);
         } catch (ValidationException $ex) {
             $messages = $ex->getMessages();
             $this->assertArrayHasKey('dateField', $messages);

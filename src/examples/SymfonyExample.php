@@ -19,7 +19,7 @@ use ValidatorsExample\examples\support\ValidationException;
 
 class SymfonyExample extends BaseExample
 {
-    public function exampleAssertion(array $input = [])
+    public function exampleValidation(array $input = [])
     {
         $validator = Validation::createValidatorBuilder()->getValidator();
 
@@ -110,6 +110,22 @@ class SymfonyExample extends BaseExample
                     ]]
                 )
             ],
+            'arrayOfObjects' => [
+                new All( // validate all values in array
+                    new Collection( // validate following keys in value
+                        [
+                            'digitField' => [
+                                new Optional(),
+                                new GreaterThan(['value' => 0])
+                            ],
+                            'optionRequiredField' => [
+                                new Required(),
+                                new NotNull(),
+                                new Choice(['choices' => ['csv', 'xls']])
+                            ],
+                        ])
+                )
+            ]
         ]);
 
         $errors = $validator->validate($input, $collectionConstraint);

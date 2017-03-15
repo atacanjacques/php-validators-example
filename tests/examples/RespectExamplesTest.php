@@ -12,7 +12,7 @@ class RespectExamplesTest extends BaseTest
         $validator = new RespectExample();
 
         try {
-            return $validator->exampleAssertion($input);
+            return $validator->exampleValidation($input);
         } catch (ValidationException $exception) {
             return false;
         }
@@ -23,7 +23,7 @@ class RespectExamplesTest extends BaseTest
         $validator = new RespectExample();
 
         try {
-            $validator->exampleAssertion([]);
+            $validator->exampleValidation([]);
         } catch (ValidationException $ex) {
             $messages = $ex->getMessages(); // needs work to get messages as ['field' => 'message'] structure
             $this->assertContains('Key dateField must be present', $messages);

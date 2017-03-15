@@ -11,7 +11,7 @@ class SymfonyExampleTest extends BaseTest
     public function runValidation(array $input = [])
     {
         try {
-            return (new SymfonyExample())->exampleAssertion($input);
+            return (new SymfonyExample())->exampleValidation($input);
         } catch (ValidationException $exception) {
             return false;
         }
@@ -22,7 +22,7 @@ class SymfonyExampleTest extends BaseTest
         $validator = new SymfonyExample();
 
         try {
-            $validator->exampleAssertion([]);
+            $validator->exampleValidation([]);
         } catch (ValidationException $ex) {
             // needs a bit work to get errors in simpler format
             $errors = [];

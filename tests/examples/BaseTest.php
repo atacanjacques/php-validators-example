@@ -14,7 +14,11 @@ abstract class BaseTest extends TestCase
         'booleanField' => 'true',
         'optionField' => 'person',
         'optionRequiredField' => 'csv',
-        'arrayOfDigits' => [123, 234, 345]
+        'arrayOfDigits' => [123, 234, 345],
+        'arrayOfObjects' => [
+            ['optionRequiredField' => 'csv', 'digitField' => 12],
+            ['optionRequiredField' => 'xls', 'digitField' => 13]
+        ]
     ];
     const INPUT_WITHOUT_OPTIONALS_OK = [
         'dateField' => '2017-03-05 11:12',
@@ -84,11 +88,23 @@ abstract class BaseTest extends TestCase
 
     public function testArrayOfDigits()
     {
-        $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['arrayOfDigits' => []])));
+        $input = array_merge(static::INPUT_OK, ['arrayOfDigits' => []]);
+        $this->assertTrue($this->runValidation($input));
         $this->assertTrue($this->runValidation(array_merge(static::INPUT_OK, ['arrayOfDigits' => [1]])));
 
         $this->assertFalse($this->runValidation(array_merge(static::INPUT_OK, ['arrayOfDigits' => ['a']]))); // array value not digit
         $this->assertFalse($this->runValidation(array_merge(static::INPUT_OK, ['arrayOfDigits' => [-1]]))); // array value not positive
+    }
+
+    public function testArrayOfObjects()
+    {
+        $this->assertFalse($this->runValidation(array_merge(static::INPUT_OK, [
+                'arrayOfObjects' => [
+                    ['optionRequiredField' => 'doesnotExists', 'digitField' => 12],
+                    ['optionRequiredField' => 'xls', 'digitField' => 13]
+                ]
+            ]
+        ))); // array value not positive
     }
 
     public function testShouldNotPassBusiness2Rule()

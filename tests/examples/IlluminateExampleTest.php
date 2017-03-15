@@ -10,7 +10,7 @@ class IlluminateExampleTest extends BaseTest
     public function runValidation(array $input = [])
     {
         try {
-            return (new IlluminateExample())->exampleAssertion($input);
+            return (new IlluminateExample())->exampleValidation($input);
         } catch (ValidationException $exception) {
             return false;
         }
@@ -21,7 +21,7 @@ class IlluminateExampleTest extends BaseTest
         $validator = new IlluminateExample();
 
         try {
-            $validator->exampleAssertion([]);
+            $validator->exampleValidation([]);
         } catch (ValidationException $ex) {
             $messages = $ex->getMessages();
             $this->assertArrayHasKey('dateField', $messages);

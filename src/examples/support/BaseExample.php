@@ -11,6 +11,6 @@ abstract class BaseExample
         $this->userService = new UserService();
     }
 
-    public abstract function exampleAssertion(array $input = []);
+    public abstract function exampleValidation(array $input = []);
 
 }
