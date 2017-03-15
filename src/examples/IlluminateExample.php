@@ -9,6 +9,14 @@ use InvalidArgumentException;
 use ValidatorsExample\examples\support\BaseExample;
 use ValidatorsExample\examples\support\ValidationException;
 
+/** version 5.4.13 requires
+        php: >=5.6.4
+        illuminate/container: 5.4.*
+        illuminate/contracts: 5.4.*
+        illuminate/support: 5.4.*
+        illuminate/translation: 5.4.*
+        symfony/http-foundation: ~3.2
+ */
 class IlluminateExample extends BaseExample
 {
     public function exampleValidation(array $input = [])

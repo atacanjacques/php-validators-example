@@ -14,6 +14,15 @@ use Zend\Validator\Regex;
 use Zend\Validator\StringLength;
 use Zend\Validator\ValidatorChain;
 
+/** zendframework/zend-validator 2.8.2 requires
+        php: ^5.5 || ^7.0
+        zendframework/zend-stdlib: ^2.7 || ^3.0
+        container-interop/container-interop: ^1.1
+
+ * zendframework/zend-filter 2.7.1 requires
+        php: ^5.5 || ^7.0
+        zendframework/zend-stdlib: ^2.7 || ^3.0
+ */
 class ZendExample extends BaseExample
 {
     // NB: missing isset() checks everywhere

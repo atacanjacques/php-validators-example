@@ -7,6 +7,10 @@ use Respect\Validation\Validator as v;
 use ValidatorsExample\examples\support\BaseExample;
 use ValidatorsExample\examples\support\ValidationException;
 
+/** version 1.1.2 requires
+        php: >=5.4
+        symfony/polyfill-mbstring: ^1.2
+ */
 class RespectExample extends BaseExample
 {
     public function exampleValidation(array $input = [])

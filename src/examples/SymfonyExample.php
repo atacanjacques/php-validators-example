@@ -17,6 +17,11 @@ use Symfony\Component\Validator\Validation;
 use ValidatorsExample\examples\support\BaseExample;
 use ValidatorsExample\examples\support\ValidationException;
 
+/** version 3.2.6 requires
+        php: >=5.5.9
+        symfony/polyfill-mbstring: ~1.0
+        symfony/translation: ~2.8|~3.0
+ */
 class SymfonyExample extends BaseExample
 {
     public function exampleValidation(array $input = [])
