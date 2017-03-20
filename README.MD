@@ -21,17 +21,23 @@ Most popular validation libraries from https://packagist.org
     * optional, 
     * string, allowed characters a-z-_
     * min length 4, max length 255
-* dateField - required, must be valid date with format 'YYYY-MM-DD HH:MI:SS' or 'YYYY-MM-DD HH:MI'
-* booleanField - optional, must be valid boolean value, if not - false is expected
+* dateField - 
+    * required, 
+    * must be valid date with format 'YYYY-MM-DD HH:MI:SS' or 'YYYY-MM-DD HH:MI'
+* booleanField - 
+    * optional, 
+    * must be valid boolean value, if not - false is expected
 * optionField - 
     * optional
     * must match one of the following ['person', 'deal']
-* optionRequiredField - required, must match one of the following ['csv', 'xls']
-* arrayOfDigits -
+* optionRequiredField - 
+    * required, 
+    * must match one of the following ['csv', 'xls']
+* arrayOfDigits - array of digits. each digit should be validated with following rules:
     * optional
     * must be an array
     * every value in array must be digit with positive value
-* arrayOfObjects -
+* arrayOfObjects - array of objects. each object in array must be validated. rules for fields in object are:
     * optionRequiredField -
         * required
         * must match one of the following ['xls', 'csv']
@@ -63,8 +69,8 @@ Example of valid input:
   "digitRelatedField": 34534,
   "arrayOfDigits": [123, 124],
   "arrayOfObjects": [
-    { "optionField": "deal", "digitField": 12}, 
-    { "optionField": "person", "digitField": 13} 
+    { "optionRequiredField": "deal", "digitField": 12}, 
+    { "optionRequiredField": "person", "digitField": 13} 
   ]
 }
 ```
