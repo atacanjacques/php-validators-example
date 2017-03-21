@@ -63,7 +63,7 @@ class Benchmark
 }
 
 /**
- * Sample output:
+ * Sample output for PHP 7.1.2:
  *
     "description" ; "loopCount" ; "zend" ; "symfony" ; "respect" ; "illuminate";
     "average time (sec)" ; 1000 ; 1.1441099643707 ; 2.2912380695343 ; 2.2082159519196 ; 7.563884973526;
