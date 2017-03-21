@@ -21,6 +21,7 @@
         }
     },
     "scripts": {
+        "time": "php src/examples/Benchmark.php",
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html report/html"
     },
